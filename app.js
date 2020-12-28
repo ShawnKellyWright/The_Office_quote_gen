@@ -1,27 +1,36 @@
 // following js code for random quote generator taken from US tv show The Office.
-const newQuoteButton = document.querySelector("#js-new-quote");
-newQuoteButton.addEventListener("click", getQuote);
-const endpoint = "https://officeapi.dev/api/quotes/random";
+const twitterButton = document.querySelector('#js-tweet');
+const spinner = document.querySelector('#js-spinner');
+const newQuoteButton = document.querySelector('#js-new-quote');
+newQuoteButton.addEventListener('click', getQuote);
 
-function getQuote() {
-    console.log("Quote button was clicked!");
-}
+const endpoint = 'https://officeapi.dev/api/quotes/random';
 
 async function getQuote() {
-    // The `try` block executes the statements within it as usual.
-    // If an exception is thrown, the statements defined in
-    // the `catch` block will be executed.
+    spinner.classList.remove('hidden');
+    newQuoteButton.disabled = true;
+
     try {
         const response = await fetch(endpoint)
-        // If the response is not 200 OK...
         if (!response.ok) {
-            throw Error(response.statusText)
+            throw Error(response.statusText);
         }
-
         const json = await response.json();
-        console.log(json);
-    } catch (err) {
-        console.log(err)
+        displayQuote(json.message);
+        setTweetButton(json.message);
+    } catch {
         alert('Failed to fetch new quote');
+    } finally {
+        newQuoteButton.disabled = false;
+        spinner.classList.add('hidden');
     }
+}
+
+function displayQuote(quote) {
+    const quoteText = document.querySelector('#js-quote-text');
+    quoteText.textContent = quote;
+}
+
+function setTweetButton(quote) {
+    twitterButton.setAttribute('href', `https://twitter.com/share?text=${quote}`);
 }
