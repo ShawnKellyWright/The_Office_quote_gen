@@ -72,6 +72,10 @@ header {
     background-color: #1e7fbb;
 }
 
+.heartEmoji {
+    color: red;
+}
+
 .new-quote {
     background-color: #301781;
     margin-bottom: 15px;
